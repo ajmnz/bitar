@@ -2,8 +2,14 @@
   "name": "bitar",
   "version": "1.0.0",
   "main": "index.js",
+  "types": "index.d.ts",
   "author": "ajmnz <arnau@ajb.cat>",
+  "description": "Everyday bits and pieces 🧩",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajmnz/bitar"
+  },
   "packageManager": "yarn@4.2.2",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "7.10.0",
