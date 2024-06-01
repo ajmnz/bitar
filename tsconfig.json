@@ -17,7 +17,7 @@
     "resolveJsonModule": true,
     "incremental": false,
     "target": "ES5",
-    "module": "ES2015",
+    "module": "CommonJS",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "sourceMap": false,
     "outDir": "dist"
