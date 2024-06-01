@@ -16,4 +16,5 @@ hooks:
   before:init:
     - yarn lint
     - yarn format
+  after:bump:
     - yarn build
