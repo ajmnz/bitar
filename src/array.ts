@@ -140,3 +140,41 @@ export const move = <T>(arr: T[], from: number, to: number): T[] => {
   cc.splice(to < 0 ? cc.length + to : to, 0, cc.splice(from, 1)[0]);
   return cc;
 };
+
+/**
+ * Find an item within an array or throw if not found. Identical to
+ * `Array.find`, but throws on not found.
+ *
+ * @param arr - The target array
+ * @param predicate - Identical to `Array.find`
+ * @param error - The error to throw
+ * @returns The found value
+ * @throws If predicate does not find anything
+ * @example
+ * ```ts
+ * arr.findOrThrow([1, 2, 3], (v) => v === 2); // 2
+ * arr.findOrThrow([1, 2, 3], (v) => v > 3); // NotFoundError: findOrThrow yielded no results
+ * ```
+ */
+export const findOrThrow = <T extends unknown[]>(
+  arr: T,
+  predicate: (v: T[number], i: number, obj: T) => boolean,
+  error = new Error(`NotFoundError: findOrThrow yielded no results`)
+): T[number] => {
+  // `Array.find` returns `undefined` when there's no match, but what if the
+  // provided array contains `undefined` values? We wouldn't be able to identify
+  // if the `undefined` result was from an array match or from `Array.find`
+  let match: T[number] | undefined = undefined;
+  let i = 0;
+  for (const el of arr) {
+    if (predicate(el, i, arr)) {
+      match = el;
+      break;
+    }
+    i++;
+  }
+  if (!match) {
+    throw error;
+  }
+  return match;
+};

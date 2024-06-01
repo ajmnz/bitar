@@ -73,4 +73,14 @@ describe("arr", () => {
     expect(arr.move([1, 2, 3, 4], 3, 2)).toEqual([1, 2, 4, 3]);
     expect(arr.move([], 3, 2)).toEqual([]);
   });
+
+  test("findOrThrow", () => {
+    expect(arr.findOrThrow([1, 2, 3], (v) => v === 2)).toEqual(2);
+    expect(() => arr.findOrThrow([1, 2, 3], (v) => v > 3)).toThrowError(
+      `NotFoundError: findOrThrow yielded no results`
+    );
+    expect(() => arr.findOrThrow([1, 2, 3], (v) => v > 3, new Error("foo"))).toThrowError(
+      "foo"
+    );
+  });
 });
