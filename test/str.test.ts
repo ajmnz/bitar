@@ -9,6 +9,13 @@ describe("str", () => {
     expect(str.capitalize("javaSCrIPT", true)).toEqual("Javascript");
   });
 
+  test("fcapitalize", () => {
+    expect(str.fcapitalize("foo bar")).toEqual("Foo bar");
+    expect(str.fcapitalize("foo")).toEqual("Foo");
+    expect(str.fcapitalize("foO Bar")).toEqual("FoO Bar");
+    expect(str.fcapitalize("foO Bar", true)).toEqual("Foo bar");
+  });
+
   test("uri", () => {
     expect(str.uri("Nike Air Force 1 '07")).toEqual("nike-air-force-1-07");
   });

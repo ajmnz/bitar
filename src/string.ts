@@ -20,6 +20,31 @@ const capitalize = <T extends string, R extends string = Capitalize<T>>(
   ) as R;
 };
 
+type FCapitalize<T extends string> = T extends `${infer F}${infer Rest}`
+  ? `${Capitalize<F>}${Rest}`
+  : T;
+
+/**
+ * Capitalize only the first letter of a string.
+ *
+ * @param str - String to capitalize
+ * @param lower - Wether all other letters should be lowercased
+ * @example
+ * ```ts
+ * fcapitalize("foo bar");        // "Foo bar"
+ * fcapitalize("foo");            // "Foo"
+ * fcapitalize("foO Bar");        // "FoO Bar"
+ * fcapitalize("foO Bar", true);  // "Foo bar"
+ * ```
+ */
+const fcapitalize = <T extends string, R extends string = FCapitalize<T>>(
+  str: T,
+  lower = false
+): R => {
+  const v = lower ? str.toLowerCase() : str;
+  return (v.charAt(0).toUpperCase() + v.slice(1)) as R;
+};
+
 /**
  * Transform a string into an URI-like version. Strips all accents and
  * non-alphanumeric characters and replaces them with a dash.
@@ -126,6 +151,7 @@ const join = (str: (string | undefined | null)[], delimiter: string) =>
 
 export default {
   capitalize,
+  fcapitalize,
   uri,
   random,
   in: _in,
