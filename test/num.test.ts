@@ -56,4 +56,13 @@ describe("num", () => {
     expect(num.random(0, 10) % 1).toBe(0);
     expect(num.random(0, 10, null) % 1).not.toBe(0); // let's pray
   });
+
+  test("nearest", () => {
+    expect(num.nearest(17, 5)).toBe(15);
+    expect(num.nearest(17.5, 5)).toBe(20);
+    expect(num.nearest(17.5, 5, "floor")).toBe(15);
+    expect(num.nearest(22, 10)).toBe(20);
+    expect(num.nearest(-7, 3)).toBe(-6);
+    expect(num.nearest(14, 4)).toBe(16);
+  });
 });

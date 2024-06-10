@@ -196,6 +196,8 @@ export const inRange = (input: number, range: [number, number | null]): boolean 
  * Rounding function. `null` disables rounding.
  */
 export type Rounding = "floor" | "ceil" | "round" | null;
+const getRoundingAlg = (rounding: Rounding) =>
+  (rounding && Math[rounding]) || ((n: number) => n);
 
 /**
  * Get a random integer between a range (inclusive).
@@ -211,6 +213,26 @@ export type Rounding = "floor" | "ceil" | "round" | null;
  * ```
  */
 export const random = (min: number, max: number, rounding: Rounding = "ceil") => {
-  const alg = (rounding && Math[rounding]) || ((n: number) => n);
-  return alg(Math.random() * (max - min + 1) + min);
+  const alg = getRoundingAlg(rounding);
+  return clamp(alg(Math.random() * (max - min + 1) + min), [min, max]);
+};
+
+/**
+ * Calculates the nearest multiple of `y` to `x`.
+ *
+ * @param x - The number to find the nearest multiple to.
+ * @param y - The base multiple to use.
+ * @param rounding - The rounding to use (`ceil` by default)
+ * @returns The neareast multiple of `y` to `x`
+ * @example
+ * ```ts
+ * num.nearest(17, 5);  // 15
+ * num.nearest(22, 10); // 20
+ * num.nearest(-7, 3);  // -6
+ * num.nearest(14, 4);  // 16
+ * ```
+ */
+export const nearest = (x: number, y: number, rounding: Rounding = "round") => {
+  const alg = getRoundingAlg(rounding);
+  return alg(x / y) * y;
 };
