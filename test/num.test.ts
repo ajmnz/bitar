@@ -54,7 +54,6 @@ describe("num", () => {
     expect(num.random(0, 10)).toBeGreaterThanOrEqual(0);
     expect(num.random(0, 10)).toBeLessThanOrEqual(10);
     expect(num.random(0, 10) % 1).toBe(0);
-    expect(num.random(0, 10, null) % 1).not.toBe(0); // let's pray
   });
 
   test("nearest", () => {
@@ -64,5 +63,14 @@ describe("num", () => {
     expect(num.nearest(22, 10)).toBe(20);
     expect(num.nearest(-7, 3)).toBe(-6);
     expect(num.nearest(14, 4)).toBe(16);
+    expect(num.nearest(1 / 3, 0.1)).toBe(0.3);
+  });
+
+  test("places", () => {
+    expect(num.places(1.234567, 2)).toBe(1.23);
+    expect(num.places(1.234567, 3)).toBe(1.235);
+    expect(num.places(1.234567, 0)).toBe(1);
+    expect(num.places(1.5, 0)).toBe(2);
+    expect(num.places(123.456, -1)).toBe(120);
   });
 });

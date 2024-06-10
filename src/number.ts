@@ -198,6 +198,16 @@ export const inRange = (input: number, range: [number, number | null]): boolean 
 export type Rounding = "floor" | "ceil" | "round" | null;
 const getRoundingAlg = (rounding: Rounding) =>
   (rounding && Math[rounding]) || ((n: number) => n);
+const getDecimalPlaces = (n: number) => {
+  const nbr = n.toString();
+  if (nbr.includes("e")) {
+    const [base, exponent] = nbr.split("e").map((nn) => parseFloat(nn));
+    const baseDecimalPlaces = (base.toString().split(".")[1] || "").length;
+    const exponentValue = Math.abs(exponent);
+    return Math.max(0, baseDecimalPlaces - exponentValue);
+  }
+  return (nbr.split(".")[1] || "").length;
+};
 
 /**
  * Get a random integer between a range (inclusive).
@@ -222,7 +232,7 @@ export const random = (min: number, max: number, rounding: Rounding = "ceil") =>
  *
  * @param x - The number to find the nearest multiple to.
  * @param y - The base multiple to use.
- * @param rounding - The rounding to use (`ceil` by default)
+ * @param rounding - The rounding to use (`round` by default)
  * @returns The neareast multiple of `y` to `x`
  * @example
  * ```ts
@@ -233,6 +243,26 @@ export const random = (min: number, max: number, rounding: Rounding = "ceil") =>
  * ```
  */
 export const nearest = (x: number, y: number, rounding: Rounding = "round") => {
-  const alg = getRoundingAlg(rounding);
-  return alg(x / y) * y;
+  return places(getRoundingAlg(rounding)(x / y) * y, getDecimalPlaces(y));
+};
+
+/**
+ * Rounds a number to a specified number of decimal places.
+ *
+ * @param n - The number to round.
+ * @param p - The number of decimal places to round to.
+ * @param rounding - The rounding to use (`round` by default)
+ * @returns The rounded number.
+ * @example
+ * ```ts
+ * num.places(1.234567, 2); // returns 1.23
+ * num.places(1.234567, 3); // returns 1.235
+ * num.places(1.234567, 0); // returns 1
+ * num.places(1.5, 0); // returns 2
+ * num.places(123.456, -1); // returns 120
+ * ```
+ */
+export const places = (n: number, p: number, rounding: Rounding = "round") => {
+  const factor = 10 ** p;
+  return getRoundingAlg(rounding)(n * factor) / factor;
 };
