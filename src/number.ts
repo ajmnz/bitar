@@ -255,11 +255,11 @@ export const nearest = (x: number, y: number, rounding: Rounding = "round") => {
  * @returns The rounded number.
  * @example
  * ```ts
- * num.places(1.234567, 2); // returns 1.23
- * num.places(1.234567, 3); // returns 1.235
- * num.places(1.234567, 0); // returns 1
- * num.places(1.5, 0); // returns 2
- * num.places(123.456, -1); // returns 120
+ * num.places(1.234567, 2); // 1.23
+ * num.places(1.234567, 3); // 1.235
+ * num.places(1.234567, 0); // 1
+ * num.places(1.5, 0);      // 2
+ * num.places(123.456, -1); // 120
  * ```
  */
 export const places = (n: number, p: number, rounding: Rounding = "round") => {
