@@ -178,3 +178,23 @@ export const findOrThrow = <T extends unknown[]>(
   }
   return match;
 };
+
+/**
+ * Shuffle items inside an array.
+ *
+ * @param array - The array to shuffle
+ * @returns A new array with the items shuffled
+ * @example
+ * ```ts
+ * arr.shuffle([1, 2, 3, 4]); // [3, 1, 2, 4]
+ * ```
+ */
+export const shuffle = <T extends any[]>(array: T): T => {
+  const shuffled = [...array] as T;
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  return shuffled;
+};

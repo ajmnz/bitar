@@ -83,4 +83,20 @@ describe("arr", () => {
       "foo"
     );
   });
+
+  test("shuffle", () => {
+    const array = [1, 2, 3, 4];
+
+    expect(arr.shuffle(array).length).toBe(array.length);
+    expect(arr.shuffle(array).sort()).toEqual([...array].sort());
+    expect(arr.shuffle(array)).not.toBe(array);
+
+    const shuffledResults = new Set<string>();
+    for (let i = 0; i < 100; i++) {
+      shuffledResults.add(arr.shuffle(array).toString());
+    }
+    expect(shuffledResults.size).toBeGreaterThan(1);
+    expect(arr.shuffle([])).toEqual([]);
+    expect(arr.shuffle([1])).toEqual([1]);
+  });
 });
