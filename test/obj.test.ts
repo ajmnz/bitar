@@ -70,4 +70,13 @@ describe("obj", () => {
       deleted: true,
     });
   });
+
+  test("split", () => {
+    const o = { a: 1, b: 2, c: 3 };
+    expect(obj.split(o, ["a", "b"], ["c"])).toEqual([{ a: 1, b: 2 }, { c: 3 }]);
+    expect(obj.split(o, ["a", "d"] as any, ["b", "e"])).toEqual([{ a: 1 }, { b: 2 }]);
+    expect(obj.split(o, ["x"] as any, ["y"])).toEqual([{}, {}]);
+    expect(obj.split({}, ["a"] as any, ["b"])).toEqual([{}, {}]);
+    expect(obj.split(obj)).toEqual([]);
+  });
 });

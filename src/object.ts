@@ -1,3 +1,5 @@
+import type { UnionToTuple } from "./types";
+
 /**
  * Typesafe implementation of `Object.keys`.
  *
@@ -186,4 +188,38 @@ export function remap<T extends object, V>(
   _?: true
 ): { [K in keyof T]: V } {
   return Object.fromEntries(keys(obj).map((k) => [k, value])) as { [K in keyof T]: V };
+}
+
+type Split<T, K> = K extends [...infer S]
+  ? S[number] extends keyof T
+    ? { [K1 in S[number]]: T[K1] }
+    : never
+  : never;
+
+/**
+ * Split an object into smaller defined groups.
+ *
+ * @param obj - The object to split
+ * @param groups - The array of key groups
+ * @returns The splitted object
+ * @example
+ * ```ts
+ * obj.split({ a: 1, b: 2, c: 3 }, ["a", "b"], ["c"]) // [{ a: 1, b: 2 }, { c: 3 }]
+ * ```
+ */
+// eslint-disable-next-line space-before-function-paren
+export function split<T extends object, const K extends (keyof T)[]>(
+  obj: T,
+  ...groups: K[]
+): UnionToTuple<Split<T, K>> {
+  const result = [] as UnionToTuple<Split<T, K>>;
+
+  for (let i = 0; i < groups.length; i++) {
+    const group = groups[i];
+    result[i] = Object.fromEntries(
+      group.filter((key) => key in obj).map((key) => [key, obj[key]])
+    );
+  }
+
+  return result;
 }
