@@ -18,7 +18,7 @@ const defaultConfig: BitarConfig = {
   },
 };
 
-let overrideConfig = defaultConfig;
+let overrideConfig = { ...defaultConfig };
 
 export function getConfig() {
   return overrideConfig;
@@ -33,9 +33,11 @@ type DeepPartial<T> = T extends object
 export function setConfig(config: DeepPartial<BitarConfig>) {
   overrideConfig = {
     ...defaultConfig,
+    ...overrideConfig,
     ...config,
     num: {
       ...defaultConfig.num,
+      ...overrideConfig.num,
       ...config.num,
     },
   };
