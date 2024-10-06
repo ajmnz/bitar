@@ -1,3 +1,5 @@
+import { resolveLocale } from "./config";
+
 /**
  * Shortcut for formatting dates with `Intl.DateTimeFormat`.
  *
@@ -13,6 +15,6 @@
  */
 export const intl = (
   date: Date | string,
-  locale: string,
+  locale?: string | null,
   options?: Intl.DateTimeFormatOptions
-) => Intl.DateTimeFormat(locale, options).format(new Date(date));
+) => Intl.DateTimeFormat(resolveLocale(locale), options).format(new Date(date));
