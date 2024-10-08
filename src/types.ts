@@ -23,3 +23,19 @@ export type UnionToTuple<T> =
   UnionToIntersection<T extends never ? never : (t: T) => T> extends (_: never) => infer W
     ? [...UnionToTuple<Exclude<T, W>>, W]
     : [];
+
+/**
+ * An array with fixed length
+ */
+export interface FixedLengthArray<T, L extends number> extends Array<T> {
+  0: T;
+  length: L;
+}
+
+/**
+ * From a number `n`, return all numbers starting from 0 up until `n-1`
+ */
+export type NumberedIndexes<
+  N extends number,
+  Acc extends number[] = [],
+> = Acc["length"] extends N ? Acc[number] : NumberedIndexes<N, [...Acc, Acc["length"]]>;

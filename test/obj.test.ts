@@ -79,4 +79,29 @@ describe("obj", () => {
     expect(obj.split({}, ["a"] as any, ["b"])).toEqual([{}, {}]);
     expect(obj.split(obj)).toEqual([]);
   });
+
+  test("flatten", () => {
+    expect(obj.flatten({ a: { b: 1 }, c: { d: 2, e: [3, 4] } })).toEqual({
+      "a.b": 1,
+      "c.d": 2,
+      "c.e[0]": 3,
+      "c.e[1]": 4,
+    });
+    expect(obj.flatten({ a: [{ b: 1 }, { c: 2 }], d: 3 })).toEqual({
+      "a[0].b": 1,
+      "a[1].c": 2,
+      d: 3,
+    });
+    expect(obj.flatten({})).toEqual({});
+    expect(obj.flatten({ a: { b: { c: 1 } }, d: 2 })).toEqual({ "a.b.c": 1, d: 2 });
+    expect(obj.flatten({ x: 42 })).toEqual({ x: 42 });
+
+    const nestedDate = {
+      event: { name: "New Year", date: new Date("2024-01-01T00:00:00Z") },
+    };
+    expect(obj.flatten(nestedDate)).toEqual({
+      "event.name": "New Year",
+      "event.date": nestedDate.event.date.toString(),
+    });
+  });
 });

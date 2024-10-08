@@ -1,4 +1,4 @@
-import type { UnionToTuple } from "./types";
+import type { FixedLengthArray, NumberedIndexes, UnionToTuple } from "./types";
 
 /**
  * Typesafe implementation of `Object.keys`.
@@ -219,6 +219,63 @@ export function split<T extends object, const K extends (keyof T)[]>(
     result[i] = Object.fromEntries(
       group.filter((key) => key in obj).map((key) => [key, obj[key]])
     );
+  }
+
+  return result;
+}
+
+type ToPaths<T, P extends string = ""> =
+  T extends Record<string | number, unknown>
+    ? {
+        [K in keyof T]: ToPaths<T[K], `${P}${P extends "" ? "" : "."}${K & string}`>;
+      }[keyof T]
+    : T extends FixedLengthArray<any, infer L>
+      ? { [K in NumberedIndexes<L>]: ToPaths<T[K], `${P}[${K}]`> }[NumberedIndexes<L>]
+      : T extends Array<infer U>
+        ? { [K in number]: ToPaths<U, `${P}[${K}]`> }[number]
+        : { path: P extends `${infer P1}` ? P1 : never; type: T };
+
+type FromPaths<T extends { path: string; type: unknown }> = {
+  [P in T["path"]]: Extract<T, { path: P }>["type"];
+};
+
+export type Flatten<T> = FromPaths<ToPaths<T>>;
+
+/**
+ * Flatten a nested object into a single-level object with dot notation keys.
+ *
+ * @param obj - The object to flatten
+ * @param prefix - The prefix for nested keys (default is an empty string)
+ * @returns A new object with flattened keys
+ * @example
+ * ```ts
+ * flatten({ a: { b: 1 }, c: { d: 2, e: [3, 4] } }) // { "a.b": 1, "c.d": 2, "c.e[0]": 3, "c.e[1]": 4 }
+ * ```
+ */
+export function flatten<T extends object>(obj: T, prefix = ""): Flatten<T> {
+  const delimiter = ".";
+  const result = {} as Flatten<T>;
+
+  if (prefix && typeof obj !== "object") {
+    return { [prefix]: obj } as unknown as Flatten<T>;
+  }
+
+  for (const [key, value] of entries(obj)) {
+    const newKey = prefix ? `${prefix}${delimiter}${key.toString()}` : key.toString();
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        Object.assign(result, (flatten as any)(item, `${newKey}[${index}]`));
+      });
+    } else if (typeof value === "object" && value !== null) {
+      const str = value.toString();
+      if (str && !str.startsWith("[object")) {
+        (result as any)[newKey] = str;
+      } else {
+        Object.assign(result, (flatten as any)(value, newKey));
+      }
+    } else {
+      (result as any)[newKey] = value;
+    }
   }
 
   return result;
