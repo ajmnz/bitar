@@ -73,4 +73,24 @@ describe("num", () => {
     expect(num.places(1.5, 0)).toBe(2);
     expect(num.places(123.456, -1)).toBe(120);
   });
+
+  test("distribute", () => {
+    expect(num.distribute(10, 5)).toEqual([2, 2, 2, 2, 2]);
+    expect(num.distribute(11, 6)).toEqual([1.85, 1.83, 1.83, 1.83, 1.83, 1.83]);
+    expect(num.distribute(11, 6, { remainder: "last" })).toEqual([
+      1.83, 1.83, 1.83, 1.83, 1.83, 1.85,
+    ]);
+    expect(num.distribute(10, 3, { decimals: 1 })).toEqual([3.4, 3.3, 3.3]);
+    expect(num.distribute(10, 3, { decimals: 2, rounding: "floor" })).toEqual([
+      3.34, 3.33, 3.33,
+    ]);
+    expect(num.distribute(10, 3, { decimals: Infinity })).toEqual([
+      10 / 3,
+      10 / 3,
+      10 / 3,
+    ]);
+    expect(num.distribute(1000, 3, { decimals: 0, remainder: "last" })).toEqual([
+      333, 333, 334,
+    ]);
+  });
 });

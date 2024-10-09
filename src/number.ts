@@ -266,3 +266,50 @@ export const places = (n: number, p: number, rounding: Rounding = "round") => {
   const factor = 10 ** p;
   return getRoundingAlg(rounding)(n * factor) / factor;
 };
+
+/**
+ * Distribute (or divide) a number evenly into the specified number of groups.
+ *
+ * @param n - The number to distribute
+ * @param groups - The number of groups to create
+ * @param options - Distribution options
+ * @returns An array with length `groups`, where each element has the evenly
+ * distributed `n`
+ */
+export const distribute = <N extends number, G extends number>(
+  n: N,
+  groups: G,
+  options?: {
+    /** The maximum number of decimals to use. @default 2 */
+    decimals?: number;
+    /** Rounding algorithm to use when adjusting to `decimals`. @default "round" */
+    rounding?: Rounding;
+    /** Where to put the remainder, if any. @default "first" */
+    remainder?: "first" | "last";
+  }
+): number[] => {
+  const { decimals = 2, rounding = "round", remainder = "first" } = options ?? {};
+
+  if (groups === 0 || decimals === Infinity) {
+    // No need to do anything else
+    return Array(groups).fill(n / groups);
+  }
+
+  let base = n / groups;
+  const factor = 10 ** decimals;
+  base = getRoundingAlg(rounding)(base * factor) / factor;
+
+  const result: number[] = Array(groups).fill(base);
+  const total = result.reduce((a, b) => a + b, 0);
+  const remaining = +(n - total).toFixed(decimals);
+
+  if (remaining > 0) {
+    if (remainder === "first") {
+      result[0] += remaining;
+    } else {
+      result[result.length - 1] += remaining;
+    }
+  }
+
+  return result;
+};
