@@ -282,23 +282,18 @@ export const distribute = <N extends number, G extends number>(
   options?: {
     /** The maximum number of decimals to use. @default 2 */
     decimals?: number;
-    /** Rounding algorithm to use when adjusting to `decimals`. @default "round" */
-    rounding?: Rounding;
     /** Where to put the remainder, if any. @default "first" */
     remainder?: "first" | "last";
   }
 ): number[] => {
-  const { decimals = 2, rounding = "round", remainder = "first" } = options ?? {};
+  const { decimals = 2, remainder = "first" } = options ?? {};
 
   if (groups === 0 || decimals === Infinity) {
     // No need to do anything else
     return Array(groups).fill(n / groups);
   }
 
-  let base = n / groups;
-  const factor = 10 ** decimals;
-  base = getRoundingAlg(rounding)(base * factor) / factor;
-
+  const base = places(n / groups, decimals, "floor");
   const result: number[] = Array(groups).fill(base);
   const total = result.reduce((a, b) => a + b, 0);
   const remaining = +(n - total).toFixed(decimals);

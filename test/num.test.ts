@@ -81,9 +81,7 @@ describe("num", () => {
       1.83, 1.83, 1.83, 1.83, 1.83, 1.85,
     ]);
     expect(num.distribute(10, 3, { decimals: 1 })).toEqual([3.4, 3.3, 3.3]);
-    expect(num.distribute(10, 3, { decimals: 2, rounding: "floor" })).toEqual([
-      3.34, 3.33, 3.33,
-    ]);
+    expect(num.distribute(10, 3, { decimals: 2 })).toEqual([3.34, 3.33, 3.33]);
     expect(num.distribute(10, 3, { decimals: Infinity })).toEqual([
       10 / 3,
       10 / 3,
@@ -92,5 +90,7 @@ describe("num", () => {
     expect(num.distribute(1000, 3, { decimals: 0, remainder: "last" })).toEqual([
       333, 333, 334,
     ]);
+    expect(num.distribute(0.01, 2, { decimals: 2 })).toEqual([0.01, 0]);
+    expect(num.distribute(0.02, 3, { decimals: 2 })).toEqual([0.02, 0, 0]);
   });
 });
