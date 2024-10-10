@@ -19,6 +19,35 @@ export const dedup = <T>(arr: T[], compare?: (a: T[], b: T) => boolean): T[] =>
   );
 
 /**
+ * Finds duplicates in an array and returns a new array with the duplicate
+ * items.
+ *
+ * Note that it uses `indexOf` to find the element inside the array. For more
+ * complex data structures, use the `extract` function to get an `indexOf`able
+ * value.
+ *
+ * @param arr - The array to find duplicates in.
+ * @param extract - A function to extract an `indexOf`able value out of the
+ * array elements.
+ * @returns A new array with the duplicate items. Note that the array is
+ * deduped.
+ * @example
+ * ```ts
+ * arr.dupes([1, 2, 3, 3, 4, 5, 5]); // [3, 5]
+ * ```
+ */
+export const dupes = <T>(
+  arr: T[],
+  extract?: (value: T, index: number, array: T[]) => any
+): T[] =>
+  dedup(
+    arr.filter((a, i, s) => {
+      const m = extract ? s.map(extract).indexOf(extract(a, i, s)) : s.indexOf(a);
+      return m !== -1 && m !== i;
+    })
+  );
+
+/**
  * Like `Array.map`, but async and awaited sequentially using `prom.seq`.
  *
  * @param arr - The target array
@@ -29,12 +58,12 @@ export const dedup = <T>(arr: T[], compare?: (a: T[], b: T) => boolean): T[] =>
  * const [e1, e2, e3] = arr.mapAsync(["foo", "bar", "baz"], async (e) => await myFn(e));
  * ```
  */
-export async function mapAsync<T, U>(
+export const mapAsync = async <T, U>(
   arr: T[],
   cb: (value: T, index: number, array: T[]) => Promise<U>
-): Promise<U[]> {
+): Promise<U[]> => {
   return await prom.seq(arr.map(cb));
-}
+};
 
 /**
  * Try to get the first value from an array.

@@ -13,6 +13,32 @@ describe("arr", () => {
     ]);
   });
 
+  test("dupes", () => {
+    expect(arr.dupes([1, 2, 3, 3, 4, 5, 5])).toEqual([3, 5]);
+    expect(arr.dupes([1, 2, 2, 3, 4])).toEqual([2]);
+    expect(arr.dupes([1, 1, 1, 1])).toEqual([1]);
+    expect(arr.dupes([1, 2, 3])).toEqual([]);
+    expect(arr.dupes([])).toEqual([]);
+    expect(arr.dupes(["apple", "banana", "apple", "orange", "banana"])).toEqual([
+      "apple",
+      "banana",
+    ]);
+    expect(arr.dupes([{ id: 1 }, { id: 2 }, { id: 1 }, { id: 3 }], (v) => v.id)).toEqual([
+      { id: 1 },
+    ]);
+    expect(
+      arr.dupes(
+        [
+          [1, 2],
+          [3, 4],
+          [1, 2],
+          [5, 6],
+        ],
+        (v) => JSON.stringify(v)
+      )
+    ).toEqual([[1, 2]]);
+  });
+
   test("mapAsync", async () => {
     const e = [1, 2, 3, 4];
     expect(await arr.mapAsync(e, (v) => Promise.resolve(v + 1))).toEqual([2, 3, 4, 5]);
