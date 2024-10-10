@@ -11,14 +11,14 @@
  * capitalize("javaSCrIPT", true);    // "Javascript"
  * ```
  */
-const capitalize = <T extends string, R extends string = Capitalize<T>>(
+function capitalize<T extends string, R extends string = Capitalize<T>>(
   str: T,
   lower = false
-): R => {
+): R {
   return (lower ? str.toLowerCase() : str).replace(/(?:^|\s|["'([{])+\S/g, (match) =>
     match.toUpperCase()
   ) as R;
-};
+}
 
 type FCapitalize<T extends string> = T extends `${infer F}${infer Rest}`
   ? `${Capitalize<F>}${Rest}`
@@ -37,13 +37,13 @@ type FCapitalize<T extends string> = T extends `${infer F}${infer Rest}`
  * fcapitalize("foO Bar", true);  // "Foo bar"
  * ```
  */
-const fcapitalize = <T extends string, R extends string = FCapitalize<T>>(
+function fcapitalize<T extends string, R extends string = FCapitalize<T>>(
   str: T,
   lower = false
-): R => {
+): R {
   const v = lower ? str.toLowerCase() : str;
   return (v.charAt(0).toUpperCase() + v.slice(1)) as R;
-};
+}
 
 /**
  * Transform a string into an URI-like version. Strips all accents and
@@ -61,18 +61,19 @@ const fcapitalize = <T extends string, R extends string = FCapitalize<T>>(
  * uri("Nike Air Force 1 '07"); // "nike-air-force-1-07"
  * ```
  */
-const uri = (
+function uri(
   str: string,
   replacePattern = /[^a-z0-9_]+/gi,
   replaceCharacter = "-",
   removePattern = /^-|-$/g
-) =>
-  str
+) {
+  return str
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
     .replace(replacePattern, replaceCharacter)
     .replace(removePattern, "")
     .toLowerCase();
+}
 
 /**
  * Generate a random string of arbitrary length containing random letters,
@@ -87,7 +88,7 @@ const uri = (
  * random(10, false); // "QmecJy2Mbt"
  * ```
  */
-const random = (length: number, allowSymbols = true): string => {
+function random(length: number, allowSymbols = true): string {
   const alphanumericChars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const symbols = allowSymbols ? "!@#$%^&*()-_+=<>?" : "";
@@ -98,7 +99,7 @@ const random = (length: number, allowSymbols = true): string => {
     result += allChars.charAt(randomIndex);
   }
   return result;
-};
+}
 
 /**
  * Check if a string is contained in an array of strings. Similar to
@@ -113,8 +114,9 @@ const random = (length: number, allowSymbols = true): string => {
  * str.in("foo", ["foo", "bar", "baz"]);
  * ```
  */
-const _in = <T extends string, T1 extends T[]>(str: T, targets: T1): str is T1[number] =>
-  targets.includes(str);
+function _in<T extends string, T1 extends T[]>(str: T, targets: T1): str is T1[number] {
+  return targets.includes(str);
+}
 
 /**
  * Add an ellipsis artificially to a string when it reaches a maximum length.
@@ -127,13 +129,13 @@ const _in = <T extends string, T1 extends T[]>(str: T, targets: T1): str is T1[n
  * str.ellipsis("Good morning", 6); // "Good m...";
  * ```
  */
-const ellipsis = (str: string, length: number) => {
+function ellipsis(str: string, length: number) {
   if (str.length <= length) {
     return str;
   }
 
   return str.slice(0, length) + "...";
-};
+}
 
 /**
  * Join multiple strings into one while filtering out any nullable items.
@@ -146,8 +148,9 @@ const ellipsis = (str: string, length: number) => {
  * str.join(["John", null, undefined, "Doe"], " "); // "John Doe"
  * ```
  */
-const join = (str: (string | undefined | null)[], delimiter: string) =>
-  str.filter(Boolean).join(delimiter);
+function join(str: (string | undefined | null)[], delimiter: string) {
+  return str.filter(Boolean).join(delimiter);
+}
 
 export default {
   capitalize,

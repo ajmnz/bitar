@@ -16,7 +16,7 @@
     "preserveWatchOutput": true,
     "resolveJsonModule": true,
     "incremental": false,
-    "target": "ES5",
+    "target": "ES6",
     "module": "CommonJS",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "sourceMap": false,
