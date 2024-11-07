@@ -152,6 +152,44 @@ function join(str: (string | undefined | null)[], delimiter: string) {
   return str.filter(Boolean).join(delimiter);
 }
 
+/**
+ * Inserts the given character `spacer` into a string every `every` characters.
+ *
+ * @param str - The input string
+ * @param every - The interval at which to insert `spacer`
+ * @param spacer - The character to insert every `every` characters.
+ * @param options - Divide options
+ * @returns The formatted string with the character inserted at every `every`
+ * characters.
+ *
+ * @example
+ * ```ts
+ * str.divide('1234567890', 3, ' ', { align: "start" }); // "123 456 789 0"
+ * str.divide('1234567890', 3, ' ', { align: "end" }); // "1 234 567 890"
+ * ```
+ */
+function divide(
+  str: string,
+  every: number,
+  spacer: string,
+  options?: {
+    /** Align the chunks when the division is uneven. @default "start" */
+    align?: "start" | "end";
+  }
+) {
+  const { align = "start" } = options ?? {};
+  return (
+    str
+      .match(
+        new RegExp(
+          `.{1,${Math.max(1, every)}}${align === "end" ? `(?=(.{${Math.max(1, every)}})*$)` : ""}`,
+          "g"
+        )
+      )
+      ?.join(spacer) || str
+  );
+}
+
 export default {
   capitalize,
   fcapitalize,
@@ -160,4 +198,5 @@ export default {
   in: _in,
   ellipsis,
   join,
+  divide,
 };

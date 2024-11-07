@@ -48,4 +48,15 @@ describe("str", () => {
     expect(str.join(["1", null, "2", "", undefined, "3"], ",")).toBe("1,2,3");
     expect(str.join([], ",")).toBe("");
   });
+
+  test("str.divide", () => {
+    expect(str.divide("1234567890", 3, " ", { align: "start" })).toBe("123 456 789 0");
+    expect(str.divide("1234567890", 3, " ", { align: "end" })).toBe("1 234 567 890");
+    expect(str.divide("1234567890", 4, "-")).toBe("1234-5678-90");
+    expect(str.divide("abcdefghij", 2, ":")).toBe("ab:cd:ef:gh:ij");
+    expect(str.divide("abcdefghij", 3, " ", { align: "start" })).toBe("abc def ghi j");
+    expect(str.divide("12345", 10, "-")).toBe("12345");
+    expect(str.divide("abcdefgh", 1, ",")).toBe("a,b,c,d,e,f,g,h");
+    expect(str.divide("", 3, "-")).toBe("");
+  });
 });
