@@ -1,5 +1,3 @@
-import { prom } from ".";
-
 /**
  * Remove duplicates from an array without using Set or mutating the provided
  * array.
@@ -46,24 +44,6 @@ export const dupes = <T>(
       return m !== -1 && m !== i;
     })
   );
-
-/**
- * Like `Array.map`, but async and awaited sequentially using `prom.seq`.
- *
- * @param arr - The target array
- * @param cb - Map callback
- * @returns The result
- * @example
- * ```ts
- * const [e1, e2, e3] = arr.mapAsync(["foo", "bar", "baz"], async (e) => await myFn(e));
- * ```
- */
-export const mapAsync = async <T, U>(
-  arr: T[],
-  cb: (value: T, index: number, array: T[]) => Promise<U>
-): Promise<U[]> => {
-  return await prom.seq(arr.map(cb));
-};
 
 /**
  * Try to get the first value from an array.
@@ -226,4 +206,71 @@ export const shuffle = <T extends any[]>(array: T): T => {
   }
 
   return shuffled;
+};
+
+//
+// Async items
+//
+
+/**
+ * Like `Array.map`, but async and awaited using `Promise.all`.
+ *
+ * @param arr - The target array
+ * @param cb - Map callback
+ * @returns The result
+ * @example
+ * ```ts
+ * const [e1, e2, e3] = await arr.async.map(["foo", "bar", "baz"], async (e) => await myFn(e));
+ * ```
+ */
+const asyncMap = async <T, U>(
+  arr: T[],
+  cb: (value: T, index: number, array: T[]) => Promise<U>
+) => await Promise.all(arr.map(cb));
+
+/**
+ * Like `Array.flatMap`, but with an async callback.
+ *
+ * @param arr - The target array
+ * @param cb - FlatMap callback
+ * @returns The result
+ * @example
+ * ```ts
+ * const v = arr.async.flatMap(["foo", "bar", "baz"], async (e) => await myFn(e));
+ * ```
+ */
+const asyncFlatmap = async <T, U>(
+  arr: T[],
+  cb: (value: T, index: number, array: T[]) => Promise<U>
+) => (await Promise.all(arr.map(cb))).flat();
+
+/**
+ * Like `Array.filter`, but with an async callback.
+ *
+ * @param arr - The target array
+ * @param cb - Filter callback
+ * @returns The result
+ * @example
+ * ```ts
+ * const v = arr.async.filter(["foo", "bar", "baz"], async (e) => await myFn(e));
+ * ```
+ */
+const asyncFilter = async <T>(
+  arr: T[],
+  cb: (value: T, index: number, array: T[]) => Promise<unknown>
+) => {
+  const e: T[] = [];
+  for (let i = 0; i < arr.length; i++) {
+    const v = arr[i];
+    if (await cb(v, i, arr)) {
+      e.push(v);
+    }
+  }
+  return e;
+};
+
+export const async = {
+  map: asyncMap,
+  flatMap: asyncFlatmap,
+  filter: asyncFilter,
 };

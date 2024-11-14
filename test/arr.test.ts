@@ -39,11 +39,6 @@ describe("arr", () => {
     ).toEqual([[1, 2]]);
   });
 
-  test("mapAsync", async () => {
-    const e = [1, 2, 3, 4];
-    expect(await arr.mapAsync(e, (v) => Promise.resolve(v + 1))).toEqual([2, 3, 4, 5]);
-  });
-
   test("first", () => {
     expect(arr.first([1, 2, 3])).toEqual(1);
     expect(arr.first([1])).toEqual(1);
@@ -124,5 +119,27 @@ describe("arr", () => {
     expect(shuffledResults.size).toBeGreaterThan(1);
     expect(arr.shuffle([])).toEqual([]);
     expect(arr.shuffle([1])).toEqual([1]);
+  });
+
+  describe("async", () => {
+    test("map", async () => {
+      const e = [1, 2, 3, 4];
+      // eslint-disable-next-line require-await
+      expect(await arr.async.map(e, async (v) => v + 1)).toEqual([2, 3, 4, 5]);
+    });
+
+    test("flatMap", async () => {
+      expect(
+        // eslint-disable-next-line require-await
+        await arr.async.flatMap([1, 2, 3], async (v) => (v === 1 ? [] : v))
+      ).toEqual([2, 3]);
+    });
+
+    test("filter", async () => {
+      expect(
+        // eslint-disable-next-line require-await
+        await arr.async.filter([1, 2, 3], async (v) => v !== 1)
+      ).toEqual([2, 3]);
+    });
   });
 });
