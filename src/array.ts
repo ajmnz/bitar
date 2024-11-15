@@ -223,10 +223,10 @@ export const shuffle = <T extends any[]>(array: T): T => {
  * const [e1, e2, e3] = await arr.async.map(["foo", "bar", "baz"], async (e) => await myFn(e));
  * ```
  */
-const asyncMap = async <T, U>(
-  arr: T[],
-  cb: (value: T, index: number, array: T[]) => Promise<U>
-) => await Promise.all(arr.map(cb));
+const asyncMap = async <T extends any[], U>(
+  arr: T,
+  cb: (value: T[number], index: number, array: T[number][]) => U
+): Promise<Awaited<U>[]> => await Promise.all(arr.map<U>(cb));
 
 /**
  * Like `Array.flatMap`, but with an async callback.
@@ -239,10 +239,14 @@ const asyncMap = async <T, U>(
  * const v = arr.async.flatMap(["foo", "bar", "baz"], async (e) => await myFn(e));
  * ```
  */
-const asyncFlatmap = async <T, U>(
-  arr: T[],
-  cb: (value: T, index: number, array: T[]) => Promise<U>
-) => (await Promise.all(arr.map(cb))).flat();
+const asyncFlatmap = async <T extends any[], U>(
+  arr: T,
+  cb: (
+    value: T[number],
+    index: number,
+    array: T[number][]
+  ) => Promise<U | ReadonlyArray<U>>
+): Promise<U[]> => (await asyncMap(arr, cb)).flat() as U[];
 
 /**
  * Like `Array.filter`, but with an async callback.
