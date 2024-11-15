@@ -208,73 +208,72 @@ export const shuffle = <T extends any[]>(array: T): T => {
   return shuffled;
 };
 
-//
-// Async items
-//
-
 /**
- * Like `Array.map`, but async and awaited using `Promise.all`.
- *
- * @param arr - The target array
- * @param cb - Map callback
- * @returns The result
- * @example
- * ```ts
- * const [e1, e2, e3] = await arr.async.map(["foo", "bar", "baz"], async (e) => await myFn(e));
- * ```
+ * Collection of native Array methods with asynchronous support
  */
-const asyncMap = async <T extends any[], U>(
-  arr: T,
-  cb: (value: T[number], index: number, array: T[number][]) => U
-): Promise<Awaited<U>[]> => await Promise.all(arr.map<U>(cb));
-
-/**
- * Like `Array.flatMap`, but with an async callback.
- *
- * @param arr - The target array
- * @param cb - FlatMap callback
- * @returns The result
- * @example
- * ```ts
- * const v = arr.async.flatMap(["foo", "bar", "baz"], async (e) => await myFn(e));
- * ```
- */
-const asyncFlatmap = async <T extends any[], U>(
-  arr: T,
-  cb: (
-    value: T[number],
-    index: number,
-    array: T[number][]
-  ) => Promise<U | ReadonlyArray<U>>
-): Promise<U[]> => (await asyncMap(arr, cb)).flat() as U[];
-
-/**
- * Like `Array.filter`, but with an async callback.
- *
- * @param arr - The target array
- * @param cb - Filter callback
- * @returns The result
- * @example
- * ```ts
- * const v = arr.async.filter(["foo", "bar", "baz"], async (e) => await myFn(e));
- * ```
- */
-const asyncFilter = async <T>(
-  arr: T[],
-  cb: (value: T, index: number, array: T[]) => Promise<unknown>
-) => {
-  const e: T[] = [];
-  for (let i = 0; i < arr.length; i++) {
-    const v = arr[i];
-    if (await cb(v, i, arr)) {
-      e.push(v);
-    }
-  }
-  return e;
-};
-
 export const async = {
-  map: asyncMap,
-  flatMap: asyncFlatmap,
-  filter: asyncFilter,
+  /**
+   * Like `Array.map`, but async and awaited using `Promise.all`.
+   *
+   * @param arr - The target array
+   * @param cb - Map callback
+   * @returns The result
+   * @example
+   * ```ts
+   * const [e1, e2, e3] = await arr.async.map(["foo", "bar", "baz"], async (e) => await myFn(e));
+   * ```
+   */
+  async map<T extends any[], U>(
+    arr: T,
+    cb: (value: T[number], index: number, array: T[number][]) => U
+  ): Promise<Awaited<U>[]> {
+    return await Promise.all(arr.map<U>(cb));
+  },
+
+  /**
+   * Like `Array.flatMap`, but with an async callback.
+   *
+   * @param arr - The target array
+   * @param cb - FlatMap callback
+   * @returns The result
+   * @example
+   * ```ts
+   * const v = arr.async.flatMap(["foo", "bar", "baz"], async (e) => await myFn(e));
+   * ```
+   */
+  async flatMap<T extends any[], U>(
+    arr: T,
+    cb: (
+      value: T[number],
+      index: number,
+      array: T[number][]
+    ) => Promise<U | ReadonlyArray<U>>
+  ): Promise<U[]> {
+    return (await async.map(arr, cb)).flat() as U[];
+  },
+
+  /**
+   * Like `Array.filter`, but with an async callback.
+   *
+   * @param arr - The target array
+   * @param cb - Filter callback
+   * @returns The result
+   * @example
+   * ```ts
+   * const v = arr.async.filter(["foo", "bar", "baz"], async (e) => await myFn(e));
+   * ```
+   */
+  async filter<T>(
+    arr: T[],
+    cb: (value: T, index: number, array: T[]) => Promise<unknown>
+  ) {
+    const e: T[] = [];
+    for (let i = 0; i < arr.length; i++) {
+      const v = arr[i];
+      if (await cb(v, i, arr)) {
+        e.push(v);
+      }
+    }
+    return e;
+  },
 };
