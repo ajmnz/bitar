@@ -59,4 +59,34 @@ describe("str", () => {
     expect(str.divide("abcdefgh", 1, ",")).toBe("a,b,c,d,e,f,g,h");
     expect(str.divide("", 3, "-")).toBe("");
   });
+
+  test("str.case.*", () => {
+    expect(str.case.fromSnake("my_example_string").toCamel()).toBe("myExampleString");
+    expect(str.case.fromSnake("my_example_string").toPascal()).toBe("MyExampleString");
+    expect(str.case.fromSnake("my_example_string").toKebab()).toBe("my-example-string");
+    expect(str.case.fromSnake("my_example_string").toTitle()).toBe("My Example String");
+
+    expect(str.case.fromKebab("my-example-string").toCamel()).toBe("myExampleString");
+    expect(str.case.fromKebab("my-example-string").toPascal()).toBe("MyExampleString");
+    expect(str.case.fromKebab("my-example-string").toSnake()).toBe("my_example_string");
+    expect(str.case.fromKebab("my-example-string").toTitle()).toBe("My Example String");
+
+    expect(str.case.fromCamel("myExampleString").toSnake()).toBe("my_example_string");
+    expect(str.case.fromCamel("myExampleString").toPascal()).toBe("MyExampleString");
+    expect(str.case.fromCamel("myExampleString").toKebab()).toBe("my-example-string");
+    expect(str.case.fromCamel("myExampleString").toTitle()).toBe("My Example String");
+
+    expect(str.case.fromPascal("MyExampleString").toCamel()).toBe("myExampleString");
+    expect(str.case.fromPascal("MyExampleString").toSnake()).toBe("my_example_string");
+    expect(str.case.fromPascal("MyExampleString").toKebab()).toBe("my-example-string");
+    expect(str.case.fromPascal("MyExampleString").toTitle()).toBe("My Example String");
+
+    expect(str.case.fromTitle("My Example String").toCamel()).toBe("myExampleString");
+    expect(str.case.fromTitle("My Example String").toSnake()).toBe("my_example_string");
+    expect(str.case.fromTitle("My Example String").toPascal()).toBe("MyExampleString");
+    expect(str.case.fromTitle("My Example String").toKebab()).toBe("my-example-string");
+
+    // @ts-expect-error test
+    expect(str.case.fromTitle("My Example String").toTitle).toBeUndefined();
+  });
 });

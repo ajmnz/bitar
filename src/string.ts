@@ -1,8 +1,28 @@
-type FCapitalize<T extends string> = T extends `${infer F}${infer Rest}`
-  ? `${Capitalize<F>}${Rest}`
-  : T;
+import { fromEntries } from "./object";
+import type { ConvertCase, FCapitalize, StringCase } from "./string.types";
 
-export default {
+const cases = ["title", "camel", "pascal", "snake", "kebab"] as const;
+
+interface CaseTransformer<
+  C1 extends StringCase,
+  C2 extends StringCase,
+  S extends string,
+> {
+  (): string;
+  (narrow: true): ConvertCase<C1, C2, S>;
+}
+
+type CaseFunction<C extends StringCase> = <S extends string>(
+  str: S
+) => {
+  [K in Exclude<StringCase, C> as `to${FCapitalize<K>}`]: CaseTransformer<C, K, S>;
+};
+
+type CaseShape = {
+  [K in StringCase as `from${FCapitalize<K>}`]: CaseFunction<K>;
+};
+
+const exp = {
   /**
    * Capitalizes first letters of words in a string.
    *
@@ -190,4 +210,69 @@ export default {
         ?.join(spacer) || str
     );
   },
+  /**
+   * Case transformers
+   */
+  case: fromEntries(
+    cases.map((c): [`from${FCapitalize<typeof c>}`, CaseFunction<typeof c>] => {
+      return [
+        `from${(c.charAt(0).toUpperCase() + c.slice(1)) as FCapitalize<typeof c>}`,
+        (str) =>
+          fromEntries(
+            cases
+              .filter((c1) => c !== c1)
+              .map((c1) => [
+                `to${(c1.charAt(0).toUpperCase() + c1.slice(1)) as FCapitalize<typeof c1>}`,
+                () => {
+                  let words: string[] = [];
+                  switch (c) {
+                    case "title":
+                    case "pascal":
+                      words = str.match(/[A-Z][a-z]+|[a-z]+/g) || [];
+                      break;
+                    case "camel":
+                      words = str.match(/[A-Z][a-z]*|[a-z]+/g) || [];
+                      break;
+                    case "snake":
+                      words = str.split("_");
+                      break;
+                    case "kebab":
+                      words = str.split("-");
+                      break;
+                  }
+
+                  if (c !== "title") {
+                    words = words.map((s) => s.replace(/\s*/g, ""));
+                  }
+
+                  switch (c1) {
+                    case "title":
+                      return words
+                        .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+                        .join(" ");
+                    case "pascal":
+                      return words
+                        .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+                        .join("");
+                    case "camel":
+                      return words
+                        .map((w, i) =>
+                          i === 0
+                            ? w.toLowerCase()
+                            : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()
+                        )
+                        .join("");
+                    case "snake":
+                      return words.map((w) => w.toLowerCase()).join("_");
+                    case "kebab":
+                      return words.map((w) => w.toLowerCase()).join("-");
+                  }
+                },
+              ])
+          ),
+      ];
+    })
+  ) as CaseShape,
 };
+
+export default exp;
