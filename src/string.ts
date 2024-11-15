@@ -8,15 +8,34 @@ interface CaseTransformer<
   C2 extends StringCase,
   S extends string,
 > {
+  /**
+   * Convert the string into the given case.
+   *
+   * @returns The converted string
+   */
   (): string;
+  /**
+   * Convert the string into the given case.
+   *
+   * @param narrow - Narrow the return type to a converted String Literal
+   * @returns The converted string
+   */
   (narrow: true): ConvertCase<C1, C2, S>;
 }
 
-type CaseFunction<C extends StringCase> = <S extends string>(
-  str: S
-) => {
-  [K in Exclude<StringCase, C> as `to${FCapitalize<K>}`]: CaseTransformer<C, K, S>;
-};
+interface CaseFunction<C extends StringCase> {
+  /**
+   * Get all the conversion methods for the given string case.
+   *
+   * @param str - The input string to convert
+   * @returns All the available conversion methods
+   */
+  <S extends string>(
+    str: S
+  ): {
+    [K in Exclude<StringCase, C> as `to${FCapitalize<K>}`]: CaseTransformer<C, K, S>;
+  };
+}
 
 type CaseShape = {
   [K in StringCase as `from${FCapitalize<K>}`]: CaseFunction<K>;
@@ -211,7 +230,14 @@ const exp = {
     );
   },
   /**
-   * Case transformers
+   * Transform one case into another.
+   *
+   * Supported cases:
+   * - `Title Case`
+   * - `camelCase`
+   * - `PascalCase`
+   * - `snake_case`
+   * - `kebab-case`
    */
   case: fromEntries(
     cases.map((c): [`from${FCapitalize<typeof c>}`, CaseFunction<typeof c>] => {
