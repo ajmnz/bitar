@@ -1,27 +1,24 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Base",
   "compilerOptions": {
     "strict": true,
     "skipLibCheck": true,
+    "composite": true,
     "declaration": true,
     "declarationMap": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "inlineSourceMap": false,
     "isolatedModules": true,
-    "moduleResolution": "node",
+    "sourceMap": false,
+    "moduleResolution": "bundler",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "allowJs": true,
     "preserveWatchOutput": true,
     "resolveJsonModule": true,
-    "incremental": false,
-    "target": "ES6",
-    "module": "CommonJS",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "sourceMap": false,
-    "outDir": "dist"
+    "incremental": true
   },
-  "include": ["src"],
   "exclude": ["node_modules"]
 }

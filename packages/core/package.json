@@ -1,0 +1,38 @@
+{
+  "name": "bitar",
+  "version": "2.1.1",
+  "author": "ajmnz <arnau@ajb.cat>",
+  "description": "Everyday bits and pieces 🧩",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajmnz/bitar"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "vitest run && yarn test:types",
+    "test:watch": "vitest",
+    "test:types": "tsc --noEmit ./test/test-types.ts",
+    "clean": "rimraf -rf dist",
+    "build": "yarn clean && tsc",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsc -w",
+    "lint": "eslint --fix src",
+    "format": "prettier --write src"
+  },
+  "devDependencies": {
+    "@types/copyfiles": "^2",
+    "@vitest/coverage-v8": "1.6.0",
+    "copyfiles": "2.4.1",
+    "rimraf": "5.0.7",
+    "typescript": "5.4.5",
+    "vitest": "1.6.0"
+  }
+}
