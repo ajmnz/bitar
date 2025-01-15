@@ -20,7 +20,7 @@
     "test": "vitest run && yarn test:types",
     "test:watch": "vitest",
     "test:types": "tsc --noEmit ./test/test-types.ts",
-    "clean": "rimraf -rf dist",
+    "clean": "rimraf -rf dist tsconfig.tsbuildinfo",
     "build": "yarn clean && tsc",
     "typecheck": "tsc --noEmit",
     "dev": "tsc -w",
