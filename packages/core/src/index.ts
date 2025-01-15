@@ -1,12 +1,7 @@
-import { setConfig } from "./config";
+import { Bitar } from "./bitar";
 
-export * as arr from "./array";
-export * as prom from "./promise";
-export { default as str } from "./string";
-export * as date from "./date";
-export * as obj from "./object";
-export * as num from "./number";
+export const { arr, prom, str, date, obj, num, configure } = new Bitar();
 
-export default {
-  configure: setConfig,
-};
+export default function bitar(...args: ConstructorParameters<typeof Bitar>) {
+  return new Bitar(...args);
+}

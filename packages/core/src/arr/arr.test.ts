@@ -1,6 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { arr } from "../src";
+import { Bitar } from "../bitar";
+
+const { arr } = new Bitar();
 
 describe("arr", () => {
   test("dedup", () => {

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type * as types from "../src/string.types";
+import type * as types from "../src/str/str.types";
 
 const TitleToCamel: types.ConvertCase<"title", "camel", "My example string"> =
   "myExampleString";

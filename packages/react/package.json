@@ -1,8 +1,8 @@
 {
-  "name": "bitar",
-  "version": "2.1.1",
+  "name": "@bitar/react",
+  "version": "0.0.0",
   "author": "ajmnz <arnau@ajb.cat>",
-  "description": "Everyday bits and pieces 🧩",
+  "description": "Everyday bits and pieces for React 🧩",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -17,9 +17,8 @@
     "access": "public"
   },
   "scripts": {
-    "test": "vitest run && yarn test:types",
+    "test": "vitest run",
     "test:watch": "vitest",
-    "test:types": "tsc --noEmit ./test/test-types.ts",
     "clean": "rimraf -rf dist",
     "build": "yarn clean && tsc",
     "typecheck": "tsc --noEmit",
@@ -33,5 +32,8 @@
     "rimraf": "5.0.7",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1"
   }
 }

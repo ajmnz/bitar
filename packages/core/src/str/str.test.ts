@@ -1,6 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { str } from "../src";
+import { Bitar } from "../bitar";
+
+const { str } = new Bitar();
 
 describe("str", () => {
   test("capitalize", () => {

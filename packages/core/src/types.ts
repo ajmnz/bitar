@@ -39,3 +39,18 @@ export type NumberedIndexes<
   N extends number,
   Acc extends number[] = [],
 > = Acc["length"] extends N ? Acc[number] : NumberedIndexes<N, [...Acc, Acc["length"]]>;
+
+/**
+ * Inject a locale property to an object
+ */
+export type WithLocale<T, L = string | null | undefined> = Omit<T, "locale"> & {
+  locale?: L;
+};
+
+export type DeepPartial<T> = T extends object
+  ? { [P in keyof T]?: DeepPartial<T[P]> }
+  : T;
+
+export type DeepReadonly<T> = T extends object
+  ? { readonly [P in keyof T]: DeepReadonly<T[P]> }
+  : Readonly<T>;

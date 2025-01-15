@@ -1,5 +1,5 @@
-import { fromEntries } from "./object";
-import type { ConvertCase, FCapitalize, StringCase } from "./string.types";
+import type { ConvertCase, FCapitalize, StringCase } from "./str.types";
+import type { Bitar } from "../bitar";
 
 const cases = ["title", "camel", "pascal", "snake", "kebab"] as const;
 
@@ -23,7 +23,7 @@ interface CaseTransformer<
   (narrow: true): ConvertCase<C1, C2, S>;
 }
 
-interface CaseFunction<C extends StringCase> {
+export interface CaseFunction<C extends StringCase> {
   /**
    * Get all the conversion methods for the given string case.
    *
@@ -41,7 +41,7 @@ type CaseShape = {
   [K in StringCase as `from${FCapitalize<K>}`]: CaseFunction<K>;
 };
 
-const exp = {
+export default (bitar: Bitar) => ({
   /**
    * Capitalizes first letters of words in a string.
    *
@@ -239,12 +239,12 @@ const exp = {
    * - `snake_case`
    * - `kebab-case`
    */
-  case: fromEntries(
+  case: bitar.obj.fromEntries(
     cases.map((c): [`from${FCapitalize<typeof c>}`, CaseFunction<typeof c>] => {
       return [
         `from${(c.charAt(0).toUpperCase() + c.slice(1)) as FCapitalize<typeof c>}`,
         (str) =>
-          fromEntries(
+          bitar.obj.fromEntries(
             cases
               .filter((c1) => c !== c1)
               .map((c1) => [
@@ -299,6 +299,4 @@ const exp = {
       ];
     })
   ) as CaseShape,
-};
-
-export default exp;
+});

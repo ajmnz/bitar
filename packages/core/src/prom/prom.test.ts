@@ -1,6 +1,8 @@
 import { describe, expect, test, vi } from "vitest";
 
-import { prom } from "../src";
+import { Bitar } from "../bitar";
+
+const { prom } = new Bitar();
 
 describe("prom", () => {
   test("wait", async () => {
