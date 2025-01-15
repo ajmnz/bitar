@@ -1,5 +1,11 @@
 # bitar
 
+## 3.0.1
+
+### Patch Changes
+
+- Update deps
+
 ## 3.0.0
 
 ### Major Changes
