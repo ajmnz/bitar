@@ -4,6 +4,7 @@
   "author": "ajmnz <arnau@ajb.cat>",
   "description": "Everyday bits and pieces for React 🧩",
   "license": "MIT",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/ajmnz/bitar"
