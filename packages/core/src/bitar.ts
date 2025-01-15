@@ -31,6 +31,7 @@ export class Bitar {
   };
 
   constructor(config?: DeepPartial<BitarConfig>) {
+    this.configure = this.configure.bind(this);
     if (config) {
       this.configure(config);
     }

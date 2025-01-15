@@ -1,5 +1,11 @@
 # bitar
 
+## 3.0.3
+
+### Patch Changes
+
+- bind `this` on global configure
+
 ## 3.0.2
 
 ### Patch Changes
