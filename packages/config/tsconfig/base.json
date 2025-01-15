@@ -12,7 +12,7 @@
     "inlineSourceMap": false,
     "isolatedModules": true,
     "sourceMap": false,
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "allowJs": true,
