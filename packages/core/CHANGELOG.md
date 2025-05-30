@@ -1,5 +1,11 @@
 # bitar
 
+## 3.1.0
+
+### Minor Changes
+
+- 5fde63b: add arr.async.some and arr.async.every
+
 ## 3.0.3
 
 ### Patch Changes
