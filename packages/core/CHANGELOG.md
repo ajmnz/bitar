@@ -1,5 +1,11 @@
 # bitar
 
+## 3.1.1
+
+### Patch Changes
+
+- 6c6856a: bump
+
 ## 3.1.0
 
 ### Minor Changes
