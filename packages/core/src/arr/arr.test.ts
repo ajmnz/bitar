@@ -143,5 +143,23 @@ describe("arr", () => {
         await arr.async.filter([1, 2, 3], async (v) => v !== 1)
       ).toEqual([2, 3]);
     });
+
+    test("some", async () => {
+      expect(await arr.async.some([1, 2, 3], (v) => Promise.resolve(v === 2))).toBe(true);
+      expect(await arr.async.some([1, 2, 3], (v) => Promise.resolve(v === 4))).toBe(
+        false
+      );
+      expect(await arr.async.some([], () => Promise.resolve(true))).toBe(false);
+    });
+
+    test("every", async () => {
+      expect(await arr.async.every([2, 4, 6], (v) => Promise.resolve(v % 2 === 0))).toBe(
+        true
+      );
+      expect(await arr.async.every([2, 3, 6], (v) => Promise.resolve(v % 2 === 0))).toBe(
+        false
+      );
+      expect(await arr.async.every([], () => Promise.resolve(false))).toBe(true);
+    });
   });
 });

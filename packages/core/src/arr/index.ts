@@ -238,7 +238,7 @@ export default () => ({
      * @returns The result
      * @example
      * ```ts
-     * const v = arr.async.flatMap(["foo", "bar", "baz"], async (e) => await myFn(e));
+     * const v = await arr.async.flatMap(["foo", "bar", "baz"], async (e) => await myFn(e));
      * ```
      */
     async flatMap<T extends any[], U>(
@@ -260,7 +260,7 @@ export default () => ({
      * @returns The result
      * @example
      * ```ts
-     * const v = arr.async.filter(["foo", "bar", "baz"], async (e) => await myFn(e));
+     * const v = await arr.async.filter(["foo", "bar", "baz"], async (e) => await myFn(e));
      * ```
      */
     async filter<T>(
@@ -275,6 +275,48 @@ export default () => ({
         }
       }
       return e;
+    },
+
+    /**
+     * Like `Array.some`, but with an async callback.
+     *
+     * @param arr - The target array
+     * @param cb - Some callback
+     * @returns The result
+     * @example
+     * ```ts
+     * const isValid = await arr.async.some([1, 2, 3], async (e) => await validate(e));
+     * ```
+     */
+    async some<T>(
+      arr: T[],
+      cb: (value: T, index: number, array: T[]) => Promise<unknown>
+    ): Promise<boolean> {
+      for (let i = 0; i < arr.length; i++) {
+        if (await cb(arr[i], i, arr)) return true;
+      }
+      return false;
+    },
+
+    /**
+     * Like `Array.every`, but with an async callback.
+     *
+     * @param arr - The target array
+     * @param cb - Every callback
+     * @returns The result
+     * @example
+     * ```ts
+     * const isValid = await arr.async.every([1, 2, 3], async (e) => await validate(e));
+     * ```
+     */
+    async every<T>(
+      arr: T[],
+      cb: (value: T, index: number, array: T[]) => Promise<unknown>
+    ): Promise<boolean> {
+      for (let i = 0; i < arr.length; i++) {
+        if (!(await cb(arr[i], i, arr))) return false;
+      }
+      return true;
     },
   },
 });
