@@ -103,7 +103,7 @@ describe("obj", () => {
     };
     expect(obj.flatten(nestedDate)).toEqual({
       "event.name": "New Year",
-      "event.date": nestedDate.event.date.toString(),
+      "event.date": nestedDate.event.date,
     });
   });
 });

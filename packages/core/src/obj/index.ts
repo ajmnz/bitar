@@ -259,13 +259,11 @@ export default () => ({
         value.forEach((item, index) => {
           Object.assign(result, (this.flatten as any)(item, `${newKey}[${index}]`));
         });
-      } else if (typeof value === "object" && value !== null) {
-        const str = value.toString();
-        if (str && !str.startsWith("[object")) {
-          (result as any)[newKey] = str;
-        } else {
-          Object.assign(result, (this.flatten as any)(value, newKey));
-        }
+      } else if (
+        value !== null &&
+        Object.prototype.toString.call(value) === "[object Object]"
+      ) {
+        Object.assign(result, (this.flatten as any)(value as any, newKey));
       } else {
         (result as any)[newKey] = value;
       }
