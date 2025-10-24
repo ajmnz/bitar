@@ -1,5 +1,11 @@
 # bitar
 
+## 3.1.2
+
+### Patch Changes
+
+- c3ccdab: improve obj.flatten
+
 ## 3.1.1
 
 ### Patch Changes
