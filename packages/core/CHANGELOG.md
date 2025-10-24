@@ -1,5 +1,11 @@
 # bitar
 
+## 3.1.3
+
+### Patch Changes
+
+- 56e9e59: fix transformers
+
 ## 3.1.2
 
 ### Patch Changes
