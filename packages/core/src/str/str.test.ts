@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { Bitar } from "../bitar";
 
-const { str } = new Bitar();
+const { str, obj } = new Bitar();
 
 describe("str", () => {
   test("capitalize", () => {
@@ -62,32 +62,32 @@ describe("str", () => {
     expect(str.divide("", 3, "-")).toBe("");
   });
 
-  test("str.case.*", () => {
-    expect(str.case.fromSnake("my_example_string").toCamel()).toBe("myExampleString");
-    expect(str.case.fromSnake("my_example_string").toPascal()).toBe("MyExampleString");
-    expect(str.case.fromSnake("my_example_string").toKebab()).toBe("my-example-string");
-    expect(str.case.fromSnake("my_example_string").toTitle()).toBe("My Example String");
+  const cases = {
+    snake: ["my_example_string", "my1_exam3ple_stri8ng"],
+    kebab: ["my-example-string", "my1-exam3ple-stri8ng"],
+    camel: ["myExampleString", "my1Exam3pleStri8ng"],
+    pascal: ["MyExampleString", "My1Exam3pleStri8ng"],
+    title: ["My Example String", "My1 Exam3ple Stri8ng"],
+  };
 
-    expect(str.case.fromKebab("my-example-string").toCamel()).toBe("myExampleString");
-    expect(str.case.fromKebab("my-example-string").toPascal()).toBe("MyExampleString");
-    expect(str.case.fromKebab("my-example-string").toSnake()).toBe("my_example_string");
-    expect(str.case.fromKebab("my-example-string").toTitle()).toBe("My Example String");
+  obj.entries(cases).forEach(([c1, v1]) => {
+    obj.entries(cases).forEach(([c2, v2]) => {
+      if (c1 === c2) {
+        return;
+      }
 
-    expect(str.case.fromCamel("myExampleString").toSnake()).toBe("my_example_string");
-    expect(str.case.fromCamel("myExampleString").toPascal()).toBe("MyExampleString");
-    expect(str.case.fromCamel("myExampleString").toKebab()).toBe("my-example-string");
-    expect(str.case.fromCamel("myExampleString").toTitle()).toBe("My Example String");
+      const from = `from${str.fcapitalize(c1) as "Snake"}` as const;
+      const to = `to${str.fcapitalize(c2) as "Kebab"}` as const;
 
-    expect(str.case.fromPascal("MyExampleString").toCamel()).toBe("myExampleString");
-    expect(str.case.fromPascal("MyExampleString").toSnake()).toBe("my_example_string");
-    expect(str.case.fromPascal("MyExampleString").toKebab()).toBe("my-example-string");
-    expect(str.case.fromPascal("MyExampleString").toTitle()).toBe("My Example String");
+      test(`str.case.${from}.${to}`, () => {
+        for (let i = 0; i < v1.length; i++) {
+          expect(str.case[from](v1[i])[to]()).toBe(v2[i]);
+        }
+      });
+    });
+  });
 
-    expect(str.case.fromTitle("My Example String").toCamel()).toBe("myExampleString");
-    expect(str.case.fromTitle("My Example String").toSnake()).toBe("my_example_string");
-    expect(str.case.fromTitle("My Example String").toPascal()).toBe("MyExampleString");
-    expect(str.case.fromTitle("My Example String").toKebab()).toBe("my-example-string");
-
+  test("str.case undefined", () => {
     // @ts-expect-error test
     expect(str.case.fromTitle("My Example String").toTitle).toBeUndefined();
   });

@@ -254,10 +254,10 @@ export default (bitar: Bitar) => ({
                   switch (c) {
                     case "title":
                     case "pascal":
-                      words = str.match(/[A-Z][a-z]+|[a-z]+/g) || [];
+                      words = str.match(/[A-Z][a-z\d]+|[a-z\d]+/g) || [];
                       break;
                     case "camel":
-                      words = str.match(/[A-Z][a-z]*|[a-z]+/g) || [];
+                      words = str.match(/[A-Z][a-z\d]*|[a-z\d]+/g) || [];
                       break;
                     case "snake":
                       words = str.split("_");
