@@ -1,5 +1,11 @@
 # bitar
 
+## 3.1.4
+
+### Patch Changes
+
+- be6acf0: Fall back to the standard currency symbol when narrowSymbol is unsupported
+
 ## 3.1.3
 
 ### Patch Changes
