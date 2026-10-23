@@ -57,11 +57,29 @@ export default (bitar: Bitar) => ({
       spaced: true,
     }
   ) {
-    let v = this.intl(n, {
+    const intlOptions: Intl.NumberFormatOptions = {
       ...bitar.config.num.currency,
       ...options,
       style: "currency",
-    });
+    };
+
+    let v: string | null = null;
+
+    try {
+      v = this.intl(n, intlOptions);
+    } catch (error) {
+      if (
+        !(error instanceof RangeError) ||
+        intlOptions.currencyDisplay !== "narrowSymbol"
+      ) {
+        throw error;
+      }
+
+      v = this.intl(n, {
+        ...intlOptions,
+        currencyDisplay: "symbol",
+      });
+    }
 
     if (options.spaced === false) {
       v = v.replace(/\s+/g, "");
